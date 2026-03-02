@@ -1,6 +1,10 @@
 package com.empresamoviles.mobiles.service;
 
+import java.util.List;
+
 import com.empresamoviles.mobiles.repository.MobileRepository;
+
+import jakarta.transaction.Transactional;
 
 public class MobileService {
 	private final MobileRepository mobileRepository;
