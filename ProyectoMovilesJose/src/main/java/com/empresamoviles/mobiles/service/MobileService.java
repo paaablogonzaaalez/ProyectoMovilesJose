@@ -47,4 +47,17 @@ public class MobileService {
 
         return mobileMapper.toDetailDTO(mobile);
     }
+    
+    /**
+     * Obtiene los 5 móviles más consultados.
+     *
+     * @return lista de MobileSummaryDTO ordenada por consultationCount desc
+     */
+    @Transactional(readOnly = true)
+    public List<MobileSummaryDTO> getTrendingMobiles() {
+        return mobileRepository.findTop5ByOrderByConsultationCountDesc()
+                .stream()
+                .map(mobileMapper::toSummaryDTO)
+                .collect(Collectors.toList());
+    }
 }
