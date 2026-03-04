@@ -60,4 +60,29 @@ public class MobileService {
                 .map(mobileMapper::toSummaryDTO)
                 .collect(Collectors.toList());
     }
+    
+    /**
+     * Compara dos móviles por sus IDs.
+     *
+     * @param id1 ID del primer móvil
+     * @param id2 ID del segundo móvil
+     * @return MobileComparisonDTO con los detalles de ambos
+     * @throws ResourceNotFoundException si alguno de los dos no existe
+     */
+    
+    @Transactional(readOnly = true)
+    public MobileComparisonDTO compare(Long id1, Long id2) {
+        Mobile mobile1 = mobileRepository.findById(id1)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Mobile not found with id: " + id1));
+
+        Mobile mobile2 = mobileRepository.findById(id2)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Mobile not found with id: " + id2));
+
+        return MobileComparisonDTO.builder()
+                .first(mobileMapper.toDetailDTO(mobile1))
+                .second(mobileMapper.toDetailDTO(mobile2))
+                .build();
+    }
 }
