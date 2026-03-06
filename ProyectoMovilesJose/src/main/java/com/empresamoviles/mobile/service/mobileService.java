@@ -45,6 +45,13 @@ public class mobileService {
 	            .mobileB(mobileMapper.toDetailDTO(mobileB))
 	            .build();
 	}
+	
+	@Transactional
+	public MobileDetailDTO createMobile(MobileCreateDTO createDTO) {
+	    Mobile mobile = mobileMapper.toEntity(createDTO);
+	    mobile.setConsultationCount(0);
+	    return mobileMapper.toDetailDTO(mobileRepository.save(mobile));
+	}
 		
 	
 	}
