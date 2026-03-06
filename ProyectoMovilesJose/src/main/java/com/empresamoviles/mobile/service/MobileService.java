@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 */
 @Service
 @RequiredArgsConstructor
-public class mobileService {
+public class MobileService {
 
 	private final MobileRepository mobileRepository;
 	private final MobileMapper mobileMapper;
