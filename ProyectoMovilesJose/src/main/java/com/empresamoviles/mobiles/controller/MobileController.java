@@ -21,7 +21,6 @@ public class MobileController {
     @GetMapping("/search")
     public ResponseEntity<List<MobileSummaryDTO>> searchMobiles(
             @Valid MobileSearchCriteriaDTO criteria) {
-
         List<MobileSummaryDTO> results = mobileService.searchMobiles(criteria);
         return ResponseEntity.ok(results);
     }
