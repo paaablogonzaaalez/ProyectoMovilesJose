@@ -1,4 +1,4 @@
-package com.empresamoviles.mobile.service;
+package com.empresamoviles.mobiles.service;
 
 import java.util.List;
 
@@ -151,8 +151,61 @@ public class mobileService {
 	
 	}
 		
-	
+	/**
+	 * Busca móviles aplicando filtros dinámicos mediante Specification.
+	 *
+	 * @param criteria DTO con los criterios de búsqueda
+	 * @return lista de MobileSummaryDTO que cumplen los filtros
+	 */
+	@Transactional(readOnly = true)
+	public List<MobileSummaryDTO> searchMobiles(MobileSearchCriteriaDTO criteria) {
+	    return mobileRepository
+	            .findAll(MobileSpecification.withFilters(criteria))
+	            .stream()
+	            .map(mobileMapper::toSummaryDTO)
+	            .collect(Collectors.toList());
 	}
+	
+	/**
+	 * Obtiene el detalle completo de un móvil por su ID.
+	 * Incrementa el contador de consultas en cada acceso.
+	 *
+	 * @param id identificador del móvil
+	 * @return MobileDetailDTO con todos los campos
+	 * @throws ResourceNotFoundException si el móvil no existe
+	 */
+	@Transactional
+	public MobileDetailDTO getMobileById(Long id) {
+	    Mobile mobile = mobileRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException(
+	                    "Mobile not found with id: " + id));
+
+	    mobile.setConsultationCount(mobile.getConsultationCount() + 1);
+	    mobileRepository.save(mobile);
+
+	    return mobileMapper.toDetailDTO(mobile);
+	}
+	
+	
+	/**
+	 * Actualiza los datos de un móvil existente.
+	 *
+	 * @param id        ID del móvil a actualizar
+	 * @param updateDTO DTO con los nuevos valores
+	 * @return MobileDetailDTO actualizado
+	 * @throws ResourceNotFoundException si el móvil no existe
+	 */
+	@Transactional
+	public MobileDetailDTO updateMobile(Long id, MobileUpdateDTO updateDTO) {
+	    Mobile existing = mobileRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException(
+	                    "Mobile not found with id: " + id));
+
+	    mobileMapper.updateEntityFromUpdateDTO(updateDTO, existing);
+
+	    return mobileMapper.toDetailDTO(mobileRepository.save(existing));
+	}
+}
 	
 	
 	
