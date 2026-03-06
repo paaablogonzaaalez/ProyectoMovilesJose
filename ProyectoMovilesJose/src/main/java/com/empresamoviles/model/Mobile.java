@@ -21,23 +21,59 @@ public class Mobile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 50)
     private String brand;
+    
+    @Column(nullable = false, length = 100)
     private String model;
+    
+    @Column(nullable = false, length = 100)
     private String processorType;
+    
+    @Column(nullable = false)
     private Integer processorCores;
+    
+   
+    @Column(nullable = false)
     private Double processorMaxSpeedGhz;
+    
+    @Column(nullable = false)
     private Integer storageGb;
+    
+    @Column(nullable = false)
     private Double screenSizeInches;
+    
+    @Column(nullable = false, length = 50)
     private String screenTechnology;
+    
+    @Column(nullable = false)
     private Integer ramGb;
+    
+    @Column(nullable = false)
     private Double heightCm;
+    
+    @Column(nullable = false)
     private Double widthCm;
+    
+    @Column(nullable = false)
     private Double thicknessCm;
+    
+    @Column(nullable = false)
     private Integer weightGrams;
+    
+    @Column(nullable = false)
     private Integer cameraMp;
+    
+    @Column(nullable = false)
     private Integer batteryMah;
+    
+    @Column(nullable = false)
     private Boolean nfc;
+    
+    @Column(nullable = false, precision = 10, scale = 2)
     private Double currentPrice;
+    
+    @Column(nullable = false)
     private LocalDate releaseDate;
 
     @Builder.Default
