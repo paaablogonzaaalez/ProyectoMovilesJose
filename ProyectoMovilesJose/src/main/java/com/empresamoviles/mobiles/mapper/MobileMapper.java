@@ -1,9 +1,8 @@
 package com.empresamoviles.mobiles.mapper;
 
-import com.empresamoviles.mobiles.dto.MobileDetailDTO;
-import com.empresamoviles.mobiles.dto.MobileSummaryDTO;
 import com.empresamoviles.mobiles.dto.MobileUpdateDTO;
-import com.empresamoviles.mobiles.model.Mobile;
+import com.empresamoviles.model.Mobile;
+
 import org.springframework.stereotype.Component;
 
 /**
