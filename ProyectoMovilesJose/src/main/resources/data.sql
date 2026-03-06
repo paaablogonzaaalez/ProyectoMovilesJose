@@ -23,4 +23,4 @@ INSERT INTO mobiles (brand, model, processor_type, processor_cores, processor_ma
 ('Sony', 'Xperia 5 V', 'Snapdragon 8 Gen 2', 8, 3.36, 128, 6.1, 'OLED', 8, 15.40, 6.82, 0.89, 182, 12, true, 999.99, '2023-09-01', 21),
 ('Google', 'Pixel 8', 'Google Tensor G3', 8, 2.91, 128, 6.2, 'OLED', 8, 15.05, 7.06, 0.88, 187, 50, true, 799.99, '2023-10-12', 67),
 ('Motorola', 'Edge 40 Neo', 'Dimensity 7030', 8, 2.50, 256, 6.55, 'OLED', 12, 15.96, 7.39, 0.79, 170, 50, true, 349.99, '2023-09-05', 8),
-('Xiaomi', '13T Pro', 'Dimensity 9200 Plus', 8, 3.35, 256, 6.67, 'AMOLED', 12, 16.24, 7.57, 0.85, 206, 50, true, 799.99, '2023-09-21', 42);
+('Xiaomi', '13T Pro', 'Dimensity 9200 Plus', 8, 3.35, 256, 6.67, 'AMOLED', 12, 16.34, 7.57, 0.85, 206, 50, true, 799.99, '2023-09-21', 42);
