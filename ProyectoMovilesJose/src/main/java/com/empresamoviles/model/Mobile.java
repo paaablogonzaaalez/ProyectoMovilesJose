@@ -33,7 +33,6 @@ public class Mobile {
     @Column(nullable = false)
     private Integer processorCores;
     
-   
     @Column(nullable = false)
     private Double processorMaxSpeedGhz;
     
@@ -76,6 +75,7 @@ public class Mobile {
     @Column(nullable = false)
     private LocalDate releaseDate;
 
+    @Column(nullable = false)
     @Builder.Default
     private Integer consultationCount = 0;
 }
