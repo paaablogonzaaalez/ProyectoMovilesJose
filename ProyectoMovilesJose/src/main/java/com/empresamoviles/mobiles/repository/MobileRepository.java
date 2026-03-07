@@ -13,6 +13,8 @@ public interface MobileRepository extends JpaRepository<Mobile, Long>, JpaSpecif
     /**
      * Obtiene los 5 móviles más consultados, ordenados de mayor a menor.
      *
-     */
+     
+		@return
+	*/
     List<Mobile> findTop5ByOrderByConsultationCountDesc();
 }
