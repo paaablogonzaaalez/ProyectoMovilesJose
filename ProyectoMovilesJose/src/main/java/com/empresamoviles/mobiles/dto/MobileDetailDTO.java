@@ -1,6 +1,7 @@
 package com.empresamoviles.mobiles.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class MobileDetailDTO {
 
@@ -22,7 +23,7 @@ public class MobileDetailDTO {
     private Integer batteryMah;
     private Boolean nfc;
     private BigDecimal currentPrice;
+    private LocalDate releaseDate;
     
-
 
 }
