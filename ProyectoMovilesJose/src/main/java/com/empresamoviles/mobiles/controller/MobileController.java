@@ -46,7 +46,8 @@ public class MobileController {
 
     @GetMapping("/trending")
     public ResponseEntity<List<MobileSummaryDTO>> getTrendingMobiles() {
-        return ResponseEntity.ok(mobileService.getTrendingMobiles());
+        List<MobileSummaryDTO> trending = mobileService.getTrendingMobiles();
+        return ResponseEntity.ok(trending);
     }
 
     @GetMapping("/compare")
