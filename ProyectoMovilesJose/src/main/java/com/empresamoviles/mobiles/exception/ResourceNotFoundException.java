@@ -7,10 +7,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceNotFoundException {
 	
 	 public ResourceNotFoundException(String message) {
-	        super(message);
+	        super();
 	    }
 
 	    public ResourceNotFoundException(String message, Throwable cause) {
-	        super(message, cause);
+	        super();
 	    }
+
+		public String getMessage() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }
