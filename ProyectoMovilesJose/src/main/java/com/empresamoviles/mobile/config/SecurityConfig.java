@@ -1,4 +1,4 @@
-package com.empresamoviles.mobile.config;
+ package com.empresamoviles.mobile.config;
 
 import java.beans.Customizer;
 
