@@ -1,14 +1,28 @@
 package com.empresamoviles.mobiles.controller;
 
-
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.empresamoviles.mobile.service.MobileService;
+import com.empresamoviles.mobiles.dto.MobileCompareDTO;
+import com.empresamoviles.mobiles.dto.MobileCreateDTO;
+import com.empresamoviles.mobiles.dto.MobileDetailDTO;
+import com.empresamoviles.mobiles.dto.MobileSearchCriteriaDTO;
+import com.empresamoviles.mobiles.dto.MobileSummaryDTO;
+import com.empresamoviles.mobiles.dto.MobileUpdateDTO;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -16,36 +30,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MobileController {
 
-    private final MobileService mobileService;
+    private final MobileService mobileService = new MobileService();
 
-    /** GET /api/v1/mobiles/search — Búsqueda dinámica */
     @GetMapping("/search")
     public ResponseEntity<List<MobileSummaryDTO>> searchMobiles(
             @Valid MobileSearchCriteriaDTO criteria) {
         return ResponseEntity.ok(mobileService.searchMobiles(criteria));
     }
 
-    /** GET /api/v1/mobiles/{id} — Detalle de un móvil */
     @GetMapping("/{id}")
     public ResponseEntity<MobileDetailDTO> getMobileById(@PathVariable Long id) {
         return ResponseEntity.ok(mobileService.getMobileById(id));
     }
 
-    /** GET /api/v1/mobiles/trending — Top 5 más consultados */
     @GetMapping("/trending")
     public ResponseEntity<List<MobileSummaryDTO>> getTrendingMobiles() {
         return ResponseEntity.ok(mobileService.getTrendingMobiles());
     }
 
-    /** GET /api/v1/mobiles/compare?id1=&id2= — Comparar dos móviles */
     @GetMapping("/compare")
-    public ResponseEntity<MobileComparisonDTO> compareMobiles(
+    public ResponseEntity<MobileCompareDTO> compareMobiles(
             @RequestParam Long id1,
             @RequestParam Long id2) {
         return ResponseEntity.ok(mobileService.compareMobiles(id1, id2));
     }
 
-    /** POST /api/v1/mobiles — Crear móvil (ADMIN) */
     @PostMapping
     public ResponseEntity<MobileDetailDTO> createMobile(
             @Valid @RequestBody MobileCreateDTO createDTO) {
@@ -53,7 +62,6 @@ public class MobileController {
                 .body(mobileService.createMobile(createDTO));
     }
 
-    /** PUT /api/v1/mobiles/{id} — Actualizar móvil (ADMIN) */
     @PutMapping("/{id}")
     public ResponseEntity<MobileDetailDTO> updateMobile(
             @PathVariable Long id,
@@ -61,7 +69,6 @@ public class MobileController {
         return ResponseEntity.ok(mobileService.updateMobile(id, updateDTO));
     }
 
-    /** DELETE /api/v1/mobiles/{id} — Eliminar móvil (ADMIN) */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMobile(@PathVariable Long id) {
         mobileService.deleteMobile(id);
