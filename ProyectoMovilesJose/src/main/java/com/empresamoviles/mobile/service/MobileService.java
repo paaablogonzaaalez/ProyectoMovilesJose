@@ -18,7 +18,7 @@ import java.util.List;
 * Gestiona búsquedas dinámicas, detalle, trending y comparación.
 */
 @Service
-@RequiredArgsConstructor
+
 public class MobileService {
 
 	  private final MobileRepository mobileRepository;
