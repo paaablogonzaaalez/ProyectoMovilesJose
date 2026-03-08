@@ -40,7 +40,8 @@ public class MobileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MobileDetailDTO> getMobileById(@PathVariable Long id) {
-        return ResponseEntity.ok(mobileService.getMobileById(id));
+    	MobileDetailDTO detail = mobileService.getMobileById(id);
+        return ResponseEntity.ok(detail);
     }
 
     @GetMapping("/trending")
