@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,36 +41,43 @@ public class MobileController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MobileDetailDTO> getMobileById(@PathVariable Long id) {
-        return ResponseEntity.ok(mobileService.getMobileById(id));
+    	MobileDetailDTO detail = mobileService.getMobileById(id);
+        return ResponseEntity.ok(detail);
     }
 
     @GetMapping("/trending")
     public ResponseEntity<List<MobileSummaryDTO>> getTrendingMobiles() {
-        return ResponseEntity.ok(mobileService.getTrendingMobiles());
+        List<MobileSummaryDTO> trending = mobileService.getTrendingMobiles();
+        return ResponseEntity.ok(trending);
     }
 
     @GetMapping("/compare")
-    public ResponseEntity<MobileCompareDTO> compareMobiles(
+    public ResponseEntity<MobileComparisonDTO> compareMobiles(
             @RequestParam Long id1,
             @RequestParam Long id2) {
-        return ResponseEntity.ok(mobileService.compareMobiles(id1, id2));
+        MobileComparisonDTO comparison = mobileService.compare(id1, id2);
+        return ResponseEntity.ok(comparison);
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MobileDetailDTO> createMobile(
             @Valid @RequestBody MobileCreateDTO createDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(mobileService.createMobile(createDTO));
+        MobileDetailDTO created = mobileService.createMobile(createDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MobileDetailDTO> updateMobile(
             @PathVariable Long id,
             @Valid @RequestBody MobileUpdateDTO updateDTO) {
-        return ResponseEntity.ok(mobileService.updateMobile(id, updateDTO));
+        MobileDetailDTO updated = mobileService.updateMobile(id, updateDTO);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMobile(@PathVariable Long id) {
         mobileService.deleteMobile(id);
         return ResponseEntity.noContent().build();
