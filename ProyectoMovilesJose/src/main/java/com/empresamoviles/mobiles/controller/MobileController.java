@@ -51,10 +51,11 @@ public class MobileController {
     }
 
     @GetMapping("/compare")
-    public ResponseEntity<MobileCompareDTO> compareMobiles(
+    public ResponseEntity<MobileComparisonDTO> compareMobiles(
             @RequestParam Long id1,
             @RequestParam Long id2) {
-        return ResponseEntity.ok(mobileService.compareMobiles(id1, id2));
+        MobileComparisonDTO comparison = mobileService.compare(id1, id2);
+        return ResponseEntity.ok(comparison);
     }
 
     @PostMapping
