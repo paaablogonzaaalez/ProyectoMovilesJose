@@ -4,7 +4,6 @@ import com.empresamoviles.mobiles.dto.MobileDetailDTO;
 import com.empresamoviles.mobiles.dto.MobileSummaryDTO;
 import com.empresamoviles.mobiles.dto.MobileUpdateDTO;
 import com.empresamoviles.model.Mobile;
-
 import org.springframework.stereotype.Component;
 
 /**
@@ -61,12 +60,10 @@ public class MobileMapper {
                 .releaseDate(mobile.getReleaseDate())
                 .build();
     }
+
     /**
      * Actualiza los campos de una entidad Mobile a partir de MobileUpdateDTO.
      * No modifica id ni consultationCount.
-     *
-     * @param dto    DTO con los nuevos valores
-     * @param mobile entidad existente a actualizar
      */
     public void updateEntityFromUpdateDTO(MobileUpdateDTO dto, Mobile mobile) {
         mobile.setBrand(dto.getBrand());
@@ -85,17 +82,8 @@ public class MobileMapper {
         mobile.setCameraMp(dto.getCameraMp());
         mobile.setBatteryMah(dto.getBatteryMah());
         mobile.setNfc(dto.getNfc());
-        mobile.setCurrentPrice(dto.getCurrentPrice());
+        // Conversión correcta de BigDecimal a Double
+        mobile.setCurrentPrice(dto.getCurrentPrice().doubleValue());
         mobile.setReleaseDate(dto.getReleaseDate());
     }
-    
-    /**
-     * Convierte una entidad Mobile a MobileDetailDTO.
-     * Reutilizado internamente para la comparación entre dos móviles.
-     * (El método toDetailDTO ya sirve — no hay que duplicar nada)
-     *
-     * Uso desde el service de comparación:
-     *   mobileMapper.toDetailDTO(mobile1)
-     *   mobileMapper.toDetailDTO(mobile2)
-     */
 }
