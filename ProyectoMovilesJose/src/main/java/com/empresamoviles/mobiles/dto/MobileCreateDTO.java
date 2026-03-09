@@ -1,20 +1,14 @@
 package com.empresamoviles.mobiles.dto;
 
+import jakarta.validation.constraints.*;
+import lombok.Data;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Size;
-import lombok.Data;
-
 /**
  * DTO para la creación de un nuevo móvil.
- * Todos los campos son obligatorios y validados.
+ * Todos los campos son obligatorios y están validados con Jakarta Validation.
+ * Solo accesible por usuarios con rol ADMIN.
  */
 @Data
 public class MobileCreateDTO {
@@ -72,10 +66,10 @@ public class MobileCreateDTO {
     private Integer weightGrams;
 
     @NotNull(message = "Los megapíxeles de cámara son obligatorios")
-    @DecimalMin(value = "0.1", message = "Los MP mínimos son 0.1")
-    private Double cameraMp;
+    @Min(value = 1, message = "La resolución mínima de cámara es 1 MP")
+    private Integer cameraMp;
 
-    @NotNull(message = "La batería es obligatoria")
+    @NotNull(message = "La capacidad de batería es obligatoria")
     @Min(value = 100, message = "La batería mínima es 100 mAh")
     private Integer batteryMah;
 

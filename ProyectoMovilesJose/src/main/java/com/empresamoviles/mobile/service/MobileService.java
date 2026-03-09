@@ -15,7 +15,8 @@ import java.util.List;
 
 /**
  * Servicio principal de lógica de negocio para la entidad Mobile.
- * Gestiona búsquedas dinámicas, detalle, trending, comparación y CRUD.
+ * Gestiona búsquedas dinámicas, detalle, trending, comparación y CRUD admin.
+ * No hay lógica de negocio en el controller — toda está aquí.
  */
 @Service
 @RequiredArgsConstructor
@@ -25,9 +26,10 @@ public class MobileService {
     private final MobileMapper mobileMapper;
 
     /**
-     * Búsqueda dinámica con filtros opcionales.
+     * Busca móviles aplicando filtros dinámicos mediante Specification.
+     * Valida que priceMin no sea mayor que priceMax.
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MobileSummaryDTO> searchMobiles(MobileSearchCriteriaDTO criteria) {
         if (criteria.getPriceMin().compareTo(criteria.getPriceMax()) > 0) {
             throw new BadRequestException("priceMin no puede ser mayor que priceMax");
@@ -40,22 +42,26 @@ public class MobileService {
     }
 
     /**
-     * Detalle de un móvil por ID. Incrementa consultationCount.
+     * Obtiene el detalle completo de un móvil por su ID.
+     * Incrementa el contador de consultas en cada acceso.
      */
     @Transactional
     public MobileDetailDTO getMobileById(Long id) {
         Mobile mobile = mobileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Móvil no encontrado con id: " + id));
+
+        // Incrementar el contador de consultas para el ranking trending
         mobile.setConsultationCount(mobile.getConsultationCount() + 1);
         mobileRepository.save(mobile);
+
         return mobileMapper.toDetailDTO(mobile);
     }
 
     /**
-     * Los 5 móviles más consultados.
+     * Obtiene los 5 móviles más consultados ordenados por popularidad.
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MobileSummaryDTO> getTrendingMobiles() {
         return mobileRepository.findTop5ByOrderByConsultationCountDesc()
                 .stream()
@@ -64,9 +70,10 @@ public class MobileService {
     }
 
     /**
-     * Comparación entre dos móviles.
+     * Compara dos móviles por sus IDs.
+     * Valida que ambos existan antes de comparar.
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public MobileComparisonDTO compareMobiles(Long id1, Long id2) {
         Mobile mobile1 = mobileRepository.findById(id1)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -74,6 +81,7 @@ public class MobileService {
         Mobile mobile2 = mobileRepository.findById(id2)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Móvil no encontrado con id: " + id2));
+
         return MobileComparisonDTO.builder()
                 .mobile1(mobileMapper.toDetailDTO(mobile1))
                 .mobile2(mobileMapper.toDetailDTO(mobile2))
@@ -81,7 +89,9 @@ public class MobileService {
     }
 
     /**
-     * Crear un nuevo móvil (ADMIN).
+     * Crea un nuevo móvil en la base de datos.
+     * Solo accesible por usuarios con rol ADMIN.
+     *
      */
     @Transactional
     public MobileDetailDTO createMobile(MobileCreateDTO createDTO) {
@@ -106,23 +116,30 @@ public class MobileService {
                 .releaseDate(createDTO.getReleaseDate())
                 .consultationCount(0)
                 .build();
+
         return mobileMapper.toDetailDTO(mobileRepository.save(mobile));
     }
 
     /**
-     * Actualizar un móvil existente (ADMIN).
+     * Actualiza los datos de un móvil existente.
+     * Solo accesible por usuarios con rol ADMIN.
+     *
      */
     @Transactional
     public MobileDetailDTO updateMobile(Long id, MobileUpdateDTO updateDTO) {
         Mobile mobile = mobileRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Móvil no encontrado con id: " + id));
+
         mobileMapper.updateEntityFromUpdateDTO(updateDTO, mobile);
+
         return mobileMapper.toDetailDTO(mobileRepository.save(mobile));
     }
 
     /**
-     * Eliminar un móvil (ADMIN).
+     * Elimina un móvil por su ID.
+     * Solo accesible por usuarios con rol ADMIN.
+     *
      */
     @Transactional
     public void deleteMobile(Long id) {

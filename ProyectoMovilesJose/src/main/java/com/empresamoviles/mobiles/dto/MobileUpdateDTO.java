@@ -8,6 +8,7 @@ import java.time.LocalDate;
 /**
  * DTO para la actualización completa de un móvil existente (PUT).
  * Todos los campos son obligatorios.
+ * Solo accesible por usuarios con rol ADMIN.
  */
 @Data
 public class MobileUpdateDTO {
@@ -45,24 +46,24 @@ public class MobileUpdateDTO {
     private Integer ramGb;
 
     @NotNull
-    @DecimalMin(value = "0.1")
+    @DecimalMin(value = "0.1", message = "El alto debe ser positivo")
     private Double heightCm;
 
     @NotNull
-    @DecimalMin(value = "0.1")
+    @DecimalMin(value = "0.1", message = "El ancho debe ser positivo")
     private Double widthCm;
 
     @NotNull
-    @DecimalMin(value = "0.1")
+    @DecimalMin(value = "0.1", message = "El grosor debe ser positivo")
     private Double thicknessCm;
 
     @NotNull
-    @Min(value = 1)
+    @Min(value = 1, message = "El peso debe ser positivo")
     private Integer weightGrams;
 
     @NotNull
-    @DecimalMin(value = "0.1", message = "Los MP de cámara deben ser positivos")
-    private Double cameraMp;
+    @Min(value = 1, message = "Los MP de cámara deben ser positivos")
+    private Integer cameraMp;
 
     @NotNull
     @Min(value = 100, message = "La batería debe ser mayor de 100 mAh")

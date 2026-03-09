@@ -16,22 +16,34 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Configuración de seguridad HTTP Basic con roles ADMIN y GUEST.
- * Habilita @PreAuthorize para proteger endpoints de escritura.
+ * Configuración de seguridad de la API.
+ * Utiliza HTTP Basic Authentication con dos roles:
+ *   - ADMIN: acceso completo (GET + POST + PUT + DELETE)
+ *   - GUEST: solo lectura (GET)
+ * Los usuarios se almacenan en memoria para simplificar el despliegue.
+ * Habilita @PreAuthorize para protección a nivel de método.
  */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    /**
+     * Configura las reglas de autorización HTTP y el mecanismo de autenticación.
+     * La consola H2 y Swagger están permitidos sin autenticación.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+               
                 .requestMatchers("/h2-console/**").permitAll()
+          
                 .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+        
                 .requestMatchers(HttpMethod.GET, "/api/v1/mobiles/**").hasAnyRole("GUEST", "ADMIN")
+
                 .requestMatchers(HttpMethod.POST, "/api/v1/mobiles/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/v1/mobiles/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/mobiles/**").hasRole("ADMIN")
@@ -43,6 +55,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    /**
+     * Define los usuarios en memoria.
+     * admin / admin → rol ADMIN (acceso completo)
+     * guest / guest → rol GUEST (solo lectura)
+     */
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
@@ -60,6 +77,10 @@ public class SecurityConfig {
         return new InMemoryUserDetailsManager(admin, guest);
     }
 
+    /**
+     * Bean del encoder de contraseñas.
+     * Usa BCrypt para un cifrado seguro.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

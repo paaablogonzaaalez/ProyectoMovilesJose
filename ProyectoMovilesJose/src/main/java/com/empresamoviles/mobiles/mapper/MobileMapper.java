@@ -9,13 +9,17 @@ import org.springframework.stereotype.Component;
 /**
  * Mapper que centraliza todas las conversiones entre
  * la entidad Mobile y sus distintos DTOs.
+ * Evita exponer la entidad directamente al cliente.
  */
 @Component
 public class MobileMapper {
 
     /**
-     * Convierte Mobile a MobileSummaryDTO.
-     * Solo incluye los campos esenciales para listados.
+     * Convierte una entidad Mobile a MobileSummaryDTO.
+     * Solo incluye los campos esenciales para listados y trending.
+     *
+     * @param mobile entidad a convertir
+     * @return MobileSummaryDTO con los campos básicos
      */
     public MobileSummaryDTO toSummaryDTO(Mobile mobile) {
         return MobileSummaryDTO.builder()
@@ -34,8 +38,12 @@ public class MobileMapper {
     }
 
     /**
-     * Convierte Mobile a MobileDetailDTO.
+     * Convierte una entidad Mobile a MobileDetailDTO.
      * Incluye todos los campos excepto consultationCount.
+     * Reutilizado en detalle, comparación y CRUD.
+     *
+     * @param mobile entidad a convertir
+     * @return MobileDetailDTO completo
      */
     public MobileDetailDTO toDetailDTO(Mobile mobile) {
         return MobileDetailDTO.builder()
@@ -62,8 +70,11 @@ public class MobileMapper {
     }
 
     /**
-     * Actualiza los campos de una entidad Mobile a partir de MobileUpdateDTO.
+     * Actualiza los campos de una entidad Mobile a partir de un MobileUpdateDTO.
      * No modifica id ni consultationCount.
+     *
+     * @param dto    DTO con los nuevos valores
+     * @param mobile entidad existente a actualizar
      */
     public void updateEntityFromUpdateDTO(MobileUpdateDTO dto, Mobile mobile) {
         mobile.setBrand(dto.getBrand());
@@ -82,7 +93,7 @@ public class MobileMapper {
         mobile.setCameraMp(dto.getCameraMp());
         mobile.setBatteryMah(dto.getBatteryMah());
         mobile.setNfc(dto.getNfc());
-        // Conversión correcta de BigDecimal a Double
+        // Conversión necesaria: BigDecimal (DTO) → Double (entidad)
         mobile.setCurrentPrice(dto.getCurrentPrice().doubleValue());
         mobile.setReleaseDate(dto.getReleaseDate());
     }

@@ -1,10 +1,12 @@
 package com.empresamoviles.mobiles.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+/**
+ * DTO de resumen para listados de móviles.
+ * Contiene solo los campos esenciales para mostrar en búsquedas y trending.
+ * No expone la entidad Mobile directamente.
+ */
 @Data
 @Builder
 @NoArgsConstructor
